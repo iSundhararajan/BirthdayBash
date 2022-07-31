@@ -1,0 +1,23 @@
+import twilio from 'twilio';
+import birthdayBashBackend from 'birthday-bash-backend';
+
+export async function sendTextMessage(toPhoneNumber){
+    const twilioAuthToken = await birthdayBashBackend.getSecret('twilioAuthToken');
+    const twilioAccountSID = await birthdayBashBackend.getSecret('twilioAccountSID');
+    const twilioPhoneNumber = await birthdayBashBackend.getSecret('twilioPhoneNumber');
+
+    const twilioClient = new twilio(twilioAccountSID, twilioAuthToken);
+
+    let birthdayMessage = await getBirthdayMessage();
+
+    twilioClient.messages.create({
+        "to": toPhoneNumber,
+        "from": twilioPhoneNumber,
+        "body": birthdayMessage
+        }
+    )
+}
+
+export function getBirthdayMessage(){
+    return "Happy birthday!";
+}
